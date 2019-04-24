@@ -1,0 +1,36 @@
+{
+    "name": "frohlfing/laravel-websocket",
+    "description": "Web Socket Server for Laravel 5.7",
+    "keywords": ["laravel", "package", "websocket"],
+    "authors": [
+        {
+            "name": "Frank Rohlfing",
+            "email": "mail@frank-rohlfing.de"
+        }
+    ],
+    "require": {
+        "php": "^7.1.3",
+        "illuminate/support": "5.7.*",
+        "cboden/ratchet": "^0.4.1",
+        "react/zmq": "^0.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "FRohlfing\\WebSocket\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.57.x-dev"
+        },
+        "laravel": {
+            "providers": [
+                "FRohlfing\\WebSocket\\WebSocketServiceProvider"
+            ],
+            "aliases": {
+                "WebSocket": "FRohlfing\\WebSocket\\Facades\\WebSocket"
+            }
+        }
+    }
+}
