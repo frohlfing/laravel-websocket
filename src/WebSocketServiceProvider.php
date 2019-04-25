@@ -2,8 +2,12 @@
 
 namespace FRohlfing\WebSocket;
 
+use FRohlfing\WebSocket\Console\Commands\WebSocketPushCommand;
+use FRohlfing\WebSocket\Contracts\WebSocketHandler;
+use FRohlfing\WebSocket\Services\WebSocket;
 use Illuminate\Support\ServiceProvider;
 use FRohlfing\WebSocket\Console\Commands\WebSocketServeCommand;
+use RuntimeException;
 
 class WebSocketServiceProvider extends ServiceProvider
 {
@@ -28,13 +32,12 @@ class WebSocketServiceProvider extends ServiceProvider
 
         // Register class
 
-        $this->app->singleton(MessageComponent::class, function (\Illuminate\Container\Container $app) {
-            $controllerName = $app['config']['websocket']['controller'];
-            if (!is_subclass_of($controllerName, BaseWebSocketController::class)) {
-                throw new WebSocketException($controllerName . " has to extend BaseWebSocketController");
+        $this->app->singleton(WebSocketHandler::class, function (\Illuminate\Container\Container $app) {
+            $handler = $app['config']['websocket']['handler'];
+            if (!is_subclass_of($handler, WebSocketHandler::class)) {
+                throw new RuntimeException($handler . ' has to implements ' . WebSocketHandler::class . '.');
             }
-            $controller = $app->make($controllerName);
-            return new MessageComponent($controller);
+            return new $handler();
         });
 
         $this->app->singleton(WebSocket::class, function ($app) {
@@ -61,6 +64,7 @@ class WebSocketServiceProvider extends ServiceProvider
         // commands
         if ($this->app->runningInConsole()) {
             $this->commands([WebSocketServeCommand::class]);
+            $this->commands([WebSocketPushCommand::class]);
         }
 	}
 
@@ -71,7 +75,7 @@ class WebSocketServiceProvider extends ServiceProvider
 	 */
 	public function provides()
 	{
-		return [MessageComponent::class, WebSocket::class];
+		return [WebSocketHandler::class, WebSocket::class];
 	}
 
 }

@@ -17,7 +17,7 @@ This package is a smart solution to a web socket support for Laravel. It's based
 [ZeroMQ](http://zeromq.org/bindings:php) is require to push messages from webserver to the clients.
 
 Download:
-	http://pecl.php.net/package/zmq/1.1.2/windows (Thread Safe, x86)
+	https://pecl.php.net/package/zmq/1.1.3/windows (Thread Safe, x86)
 
 1) Copy libzmq.dll into your php directory (e.g. c:\xampp\php\)
 
@@ -106,7 +106,7 @@ Start the websocket server via shell:
 You can send a message from the webserver to the clients. Add following route to test the push feature:
 
     Route::get('push', function() {
-        WebSocket::send(json_encode(array('message' => 'foo')));
+        WebSocket::push(json_encode(array('message' => 'foo')));
     });
 
 # Notes

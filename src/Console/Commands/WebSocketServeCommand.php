@@ -3,7 +3,7 @@
 namespace FRohlfing\WebSocket\Console\Commands;
 
 use Exception;
-use FRohlfing\WebSocket\MessageComponent;
+use FRohlfing\WebSocket\Contracts\WebSocketHandler;
 use Illuminate\Console\Command;
 use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
@@ -43,7 +43,7 @@ class WebSocketServeCommand extends Command
      * @var string
      */
     protected $signature = 'websocket:serve
-                            { --p|port= : The Port on which we listen for new connections }';
+                            { --p|port=%1 : The Port on which we listen for new connections }';
 
     /**
      * The console command description.
@@ -53,16 +53,12 @@ class WebSocketServeCommand extends Command
     protected $description = 'Start a web socket server.';
 
     /**
-     * MessageComponent Instance
-     */
-    protected $messageComponent;
-
-    /**
      * Create a new command instance.
      */
     public function __construct()
     {
-        $this->messageComponent = app(MessageComponent::class);
+        $this->signature = str_replace('%1', config('websocket.port'), $this->signature);
+
         parent::__construct();
     }
 
@@ -78,22 +74,24 @@ class WebSocketServeCommand extends Command
 
         try {
             $port = $this->option('port');
-            if ($port === null) {
-                $port = config('websocket.port');
-            }
+            //if ($port === null) {
+            //    $port = config('websocket.port');
+            //}
+            $pushPort = config('websocket.push_port');
 
             // Create an event loop
             $loop = Factory::create();
 
             // get the web socket handler
-            $handler = $this->messageComponent;
+            $handler = app(WebSocketHandler::class);
 
             // Listen for the web server message to redirect to the web socket
             $context = new Context($loop);
             /** @var \React\ZMQ\SocketWrapper $pull */
             /** @noinspection PhpUndefinedMethodInspection */
             $pull = $context->getSocket(\ZMQ::SOCKET_PULL, config('websocket.zmq_pull_id'));
-            $pull->bind('tcp://127.0.0.1:' . config('websocket.push_port'));
+            /** @noinspection PhpUndefinedMethodInspection */
+            $pull->bind('tcp://127.0.0.1:' . $pushPort); // Binding to 127.0.0.1 means the only client that can connect is itself
             $pull->on('message', [$handler, 'onPush']);
 
             // Set up our web socket server for clients wanting real-time updates
@@ -106,9 +104,10 @@ class WebSocketServeCommand extends Command
                 ), $webSock
             );
 
-            $this->info('Listening on port ' . $port);
-            $loop->run();
+            $this->info('Web socket is listening on port ' . $port);
+            $this->info('Push service is listening on port ' . $pushPort);
 
+            $loop->run();
         }
         catch (Exception $e) {
             $this->error($e->getMessage());

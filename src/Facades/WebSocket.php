@@ -4,6 +4,12 @@ namespace FRohlfing\WebSocket\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
+/**
+ * @method static void push($msg)
+ * @method static void push2($msg)
+ *
+ * @see \FRohlfing\WebSocket\WebSocket
+ */
 class WebSocket extends Facade
 {
     /**
@@ -13,6 +19,6 @@ class WebSocket extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'websocket';
+        return \FRohlfing\WebSocket\Services\WebSocket::class;
     }
 }

@@ -31,14 +31,14 @@ class ExampleWebSocketController extends BaseWebSocketController {
         /** @var \Ratchet\WebSocket\Version\RFC6455\Connection $from */
         $data = json_decode($msg, true);
         /** @noinspection PhpUndefinedFieldInspection */
-        echo $from->client->id . ': Client send message "' . $data['message'] . '"' . "\n";
+        echo $from->client->id . ': Client sent message "' . $data['message'] . '"' . "\n";
         $this->broadcastExclude(json_encode($data), [$from]);
     }
 
     public function onPush($msg)
     {
         $data = json_decode($msg, true);
-        echo '0000000000000: Webserver send message "' . $data['message'] . '"' . "\n";
+        echo '0000000000000: Webserver sent message "' . $data['message'] . '"' . "\n";
         $this->broadcast(json_encode($data));
     }
 

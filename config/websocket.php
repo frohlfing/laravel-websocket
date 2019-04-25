@@ -4,15 +4,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Web Socket Controller
+    | Web Socket Handler
     |--------------------------------------------------------------------------
     |
-    | Controller to handle the events from the web socket server.
-    | The Controller has to extend BaseWebSocketController.
+    | Class to handle the events from the websocket server. The Class has to
+    | implements the interface `FRohlfing\WebSocket\Contracts\WebSocketHandler`.
     |
     */
 
-    'controller' => 'App\Sockets\WebSocketController',
+    'handler' => 'App\Sockets\WebSocketHandler',
 
     /*
     |--------------------------------------------------------------------------
@@ -37,6 +37,18 @@ return [
     */
 
     'push_port' => 5555,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Port for push messages
+    |--------------------------------------------------------------------------
+    |
+    | Specifies how long the push socket blocks trying flush messages after it
+    | has been closed (in ms, null means infinitely).
+    |
+    */
+
+    'push_timeout' => 2000,
 
     /*
     |--------------------------------------------------------------------------

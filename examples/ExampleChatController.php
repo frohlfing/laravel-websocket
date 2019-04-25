@@ -20,5 +20,4 @@ class ExampleChatController extends Controller
     {
         return view('chat.index');
     }
-
 }
