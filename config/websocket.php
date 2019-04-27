@@ -76,4 +76,15 @@ return [
 
     'zmq_pull_id' => 'zmq.pull',
 
+/*
+    |--------------------------------------------------------------------------
+    | Reconnect Delay
+    |--------------------------------------------------------------------------
+    |
+    | Delay for a reconnect after the connection is lost (in ms, null means never)
+    |
+    */
+
+    'reconnect_delay' => 2000,
+
 ];

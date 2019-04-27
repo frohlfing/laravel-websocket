@@ -55,59 +55,18 @@ Next you need to edit `config/websocket.php`.
   
 # Usage
 
-Create a controller `WebSocketController.php` in the folder `app\Sockets`:
-
-    <?php 
-    
-    namespace App\Sockets;
-    
-    use FRohlfing\WebSocket\BaseWebSocketController;
-    
-    class WebSocketController extends BaseWebSocketController {
-    
-        public function onOpen($conn)
-        {
-            $conn->client = new \StdClass;
-            $conn->client->id  = uniqid();
-            echo $conn->client->id.': Connection '.$conn->resourceId.' open'."\n";
-            $conn->send(json_encode(['message' => 'Welcome!']));
-        }
-    
-        public function onClose($conn)
-        {
-            echo $conn->client->id.': Connection '.$conn->resourceId.' close'."\n";
-        }
-    
-        public function onMessage($from, $msg)
-        {
-            $data = json_decode($msg, true);
-            echo $from->client->id.': Client send message "'.$data['message'].'"'."\n";
-            $this->broadcastExclude(json_encode($data), [$from]);
-        }
-    
-        public function onPush($msg)
-        {
-            $data = json_decode($msg, true);
-            echo '0000000000000: Webserver send message "'.$data['message'].'"'."\n";
-            $this->broadcast(json_encode($data));
-        }
-    
-        public function onError($conn, \Exception $e)
-        {
-            echo $conn->client->id.': Exception: '.$e."\n";
-            $conn->close();
-        }
-    }
+Copy `examples/WebSocketHandler.php.stub` to `app/Sockets/WebSocketHandler.php`.
+Copy `examples/ChatController.php.stubp` to `app/Http/Controllers/ChatController.php`.
+Copy `examples/chat.blade.php` to `resources/views/websocket/chat.blade.php`.
+Copy the content of `examples/routes.php` into `routes/web.php`.
     
 Start the websocket server via shell:
 
     php artisan websocket:serve
     
-You can send a message from the webserver to the clients. Add following route to test the push feature:
+Open this URL with your browser to chat:
 
-    Route::get('push', function() {
-        WebSocket::push(json_encode(array('message' => 'foo')));
-    });
+    http://<server>/websocket/chat
 
 # Notes
 

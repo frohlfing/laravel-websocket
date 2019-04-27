@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use FRohlfing\WebSocket\Facades\WebSocket;
+use Illuminate\Http\Response;
+
+class ChatController extends Controller
+{
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * Show the chat page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return view('websocket.chat');
+    }
+
+    /**
+     * Push a message to the web socket.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function ping()
+    {
+        WebSocket::push2(json_encode([
+            'Sender' => 'WEBSERVER',
+            'Event' => 'PING',
+            'Data' => ['Timestamp' => Carbon::now()->toDateTimeString()]
+        ]));
+
+        /** @noinspection PhpUndefinedMethodInspection */
+        return response()->json(['message' => 'pong'], Response::HTTP_OK);
+    }
+}
