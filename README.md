@@ -17,18 +17,6 @@ PHP library to build websocket server.
 
 [ZeroMQ](http://zeromq.org/bindings:php) is require to push messages from webserver to the clients.
 
-Download:
-	https://pecl.php.net/package/zmq/1.1.3/windows (Thread Safe, x86)
-
-1) Copy libzmq.dll into your php directory (e.g. c:\xampp\php\)
-
-2) Copy php_zmq.dll to your php extension directory (e.g. c:\xampp\php\ext\)
-
-3) Add the following line to your php.ini:
-	extension=php_zmq.dll
-
-4) Restart your web server.
-
 # Installation
     
 Add this to the "repositories" property in `composer.json`:
@@ -82,7 +70,7 @@ You can run the web socket in the background like this:
     php artisan websocket:serve > /dev/null 2>&1 &
     ```
 
-However, it is better to use a process monitor such as [Supervisor](http://supervisord.org/index.html) (on Mac and Linux) 
+However, it is better to use a process monitor such as [Supervisor](http://supervisord.org/) (on Mac and Linux) 
 or [NSSM](http://nssm.cc) (on Windows) to automatically restart the Web Socket if it fails.
 
 ## Installation on Mac and Linux:
