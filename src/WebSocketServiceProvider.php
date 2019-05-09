@@ -59,7 +59,7 @@ class WebSocketServiceProvider extends ServiceProvider
         $this->publishes([__DIR__ . '/../config/websocket.php' => config_path('websocket.php')], 'config');
 
         // assets
-        $this->publishes([__DIR__ . '/../public' => public_path('vendor/websocket/')], 'public');
+        $this->publishes([__DIR__ . '/../resources/js/websocket.js' => public_path('js/websocket.js')], 'public');
 
         // commands
         if ($this->app->runningInConsole()) {

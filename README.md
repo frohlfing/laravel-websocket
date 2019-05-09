@@ -28,19 +28,13 @@ Add this to the "repositories" property in `composer.json`:
         }
     ],
 
-Fetch the package by running the following command:
+Fetch the package via composer:
 
     composer require frohlfing/laravel-websocket:1.57.*@dev
 
-Publish the assets by running the following command:
-
-    php artisan vendor:publish --provider="FRohlfing\WebSocket\WebSocketServiceProvider" --tag="public"
-	
-Publish the configuration file:
+Publish the configuration file if you need to override the default settings:
 
     php artisan vendor:publish --provider="FRohlfing\WebSocket\WebSocketServiceProvider" --tag="config"
-    
-Next you may edit `config/websocket.php`.   
   
 # Usage
 
@@ -50,9 +44,11 @@ Copy `examples/ChatController.php.stubp` to `app/Http/Controllers/ChatController
 
 Copy `examples/chat.blade.php` to `resources/views/websocket/chat.blade.php`.
 
+Copy `resources/js/websocket.js` to `public/js/websocket.js`.
+
 Copy the content of `examples/routes.php` into `routes/web.php`.
     
-Start the web socket server via shell:
+Start the web socket server:
 
     ```bash
     php artisan websocket:serve
@@ -73,7 +69,7 @@ You can run the web socket in the background like this:
 However, it is better to use a process monitor such as [Supervisor](http://supervisord.org/) (on Mac and Linux) 
 or [NSSM](http://nssm.cc) (on Windows) to automatically restart the Web Socket if it fails.
 
-## Installation on Mac and Linux:
+## Installation under Mac and Linux
 
 1) Install [Supervisor](http://supervisord.org/)
 2) **On Mac:**
@@ -117,10 +113,10 @@ or [NSSM](http://nssm.cc) (on Windows) to automatically restart the Web Socket i
     supervisorctl status
     ```
 
-## Installation on Windows:
+## Installation under Windows
 
 1) Install [NSSM](http://nssm.cc) - the Non-Sucking Service Manager.
-2) Install a the web socket as windows service:
+2) Install the web socket as windows service:
 
     ```bash
     nssm install "websocket" ImagePath "C:\xampp\php\php.exe" AppDirectory "C:\xampp\htdocs\laravel5" DisplayName "Web Socket Server" Description "Web Socket Server for Laravel"
