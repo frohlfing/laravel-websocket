@@ -28,18 +28,26 @@
                 $.ajax({
                     method: 'GET',
                     url: $(this).data('url')
-                }).fail(function(err) {
-                    trace(err.statusText);
-                }).done(function(res) {
+                }).fail(function(error) {
+                    trace(error.statusText);
+                }).done(function(response) {
                     trace('Ping sent');
                 });
+                // axios({
+                //     method: 'get',
+                //     url: $(this).data('url')
+                // }).catch(function (error) {
+                //     trace(error.response.statusText,);
+                // }).then(function (response) {
+                //     trace('Ping sent');
+                // });
             });
 
-            $('#openBtn').click(function() {
+            $('#connectBtn').click(function() {
                 websocket.open();
             });
 
-            $('#closeBtn').click(function() {
+            $('#disconnectBtn').click(function() {
                 websocket.close();
             });
 
@@ -59,7 +67,6 @@
 
             websocket.on('close', function(code, reason) {
                 trace('Socket closed: ' + reason + ' (' + code + ')');
-                return false;
             });
 
             websocket.on('message', function(message) {

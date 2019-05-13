@@ -66,8 +66,8 @@ You can run the web socket in the background like this:
     php artisan websocket:serve > /dev/null 2>&1 &
     ```
 
-However, it is better to use a process monitor such as [Supervisor](http://supervisord.org/) (on Mac and Linux) 
-or [NSSM](http://nssm.cc) (on Windows) to automatically restart the Web Socket if it fails.
+However, it is better to use a process monitor such as [Supervisor](http://supervisord.org/) (under Mac and Linux) 
+or [NSSM](http://nssm.cc) (under Windows) to automatically restart the Web Socket if it fails.
 
 ## Installation under Mac and Linux
 
@@ -116,16 +116,22 @@ or [NSSM](http://nssm.cc) (on Windows) to automatically restart the Web Socket i
 ## Installation under Windows
 
 1) Install [NSSM](http://nssm.cc) - the Non-Sucking Service Manager.
+
 2) Install the web socket as windows service:
 
     ```bash
-    nssm install "websocket" ImagePath "C:\xampp\php\php.exe" AppDirectory "C:\xampp\htdocs\laravel5" DisplayName "Web Socket Server" Description "Web Socket Server for Laravel"
+    nssm install websocket "C:\xampp\php\php.exe" artisan websocket:serve
+    nssm set websocket AppDirectory "C:\xampp\htdocs\laravel5"
+    nssm set websocket DisplayName "Web Socket Server"
+    nssm set websocket Description "Web Socket Server for Laravel" 
+    nssm start websocket
     ```
-    
-    Parameters:    
-    - Path:        `C:\xampp\php\php.exe`
-    - Startup Dir: `C:\xampp\htdocs\laravel5`
-    - Arguments:   `artisan websocket:serve`
+
+3) Check that the web socket runs:
+	
+	```bash
+    nssm status websocket
+    ```
 
 # Notes
 
