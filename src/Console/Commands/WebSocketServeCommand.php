@@ -110,6 +110,9 @@ class WebSocketServeCommand extends Command
             $loop->run();
         }
         catch (Exception $e) {
+            if (config('app.debug')) {
+                throw $e;
+            }
             $this->error($e->getMessage());
             return static::EXIT_FAILURE;
         }
