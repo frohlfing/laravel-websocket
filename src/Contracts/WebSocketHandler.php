@@ -12,4 +12,12 @@ interface WebSocketHandler extends MessageComponentInterface
      * @param string $msg
      */
     public function onPush($msg);
+
+    /**
+     * If there is an error with the push socket handler, the Exception is handled by the Server and bubbled back up
+     * through this method.
+     *
+     * @param \Exception $e
+     */
+    public function onPushError(\Exception $e);
 }

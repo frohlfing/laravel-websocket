@@ -32,12 +32,12 @@ class WebSocketServiceProvider extends ServiceProvider
 
         // Register class
 
-        $this->app->singleton(WebSocketHandler::class, function (\Illuminate\Container\Container $app) {
+        $this->app->singleton(WebSocketHandler::class, function (\Illuminate\Container\Container $app, $parameters) {
             $handler = $app['config']['websocket']['handler'];
             if (!is_subclass_of($handler, WebSocketHandler::class)) {
                 throw new RuntimeException($handler . ' has to implements ' . WebSocketHandler::class . '.');
             }
-            return new $handler();
+            return new $handler(...$parameters);
         });
 
         $this->app->singleton(WebSocket::class, function ($app) {

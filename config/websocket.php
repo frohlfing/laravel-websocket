@@ -25,7 +25,7 @@ return [
     |
     */
 
-    'port' => 1111,
+    'port' => env('WEBSOCKET_PORT', 1111),
 
     /*
     |--------------------------------------------------------------------------
@@ -36,7 +36,7 @@ return [
     |
     */
 
-    'push_port' => 5555,
+    'push_port' => env('WEBSOCKET_PUSH_PORT', 5555),
 
     /*
     |--------------------------------------------------------------------------
@@ -48,7 +48,7 @@ return [
     |
     */
 
-    'push_timeout' => 2000,
+    'push_timeout' => env('WEBSOCKET_PUSH_TIMEOUT', 2000),
 
     /*
     |--------------------------------------------------------------------------
@@ -85,6 +85,19 @@ return [
     |
     */
 
-    'reconnect_delay' => 2000,
+    'reconnect_delay' => env('WEBSOCKET_RECONNECT_DELAY', 2000),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Log Level
+    |--------------------------------------------------------------------------
+    |
+    | The verbosity of logging.
+    |
+    | "none", "error", "info" or "debug"
+    |
+    */
+
+    'logLevel' => env('WEBSOCKET_LOGLEVEL', 'error'),
 
 ];
