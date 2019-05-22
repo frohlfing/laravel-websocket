@@ -63,6 +63,13 @@ class WebSocketServeCommand extends Command
     private $handler;
 
     /**
+     * React Event Loop instance
+     *
+     * @var LoopInterface
+     */
+    private $loop;
+
+    /**
      * Create a new command instance.
      */
     public function __construct()
@@ -107,13 +114,13 @@ class WebSocketServeCommand extends Command
             $pushPort = config('websocket.push_port');
 
             // Create an event loop
-            $loop = Factory::create();
+            $this->loop = Factory::create();
 
             // Get the web socket handler
             $this->handler = app(WebSocketHandler::class, [$this]);
 
             // Listen for the web server message to redirect to the web socket
-            $context = new Context($loop);
+            $context = new Context($this->loop);
             /** @var \React\ZMQ\SocketWrapper $pull */
             /** @noinspection PhpUndefinedMethodInspection */
             $pull = $context->getSocket(\ZMQ::SOCKET_PULL, config('websocket.zmq_pull_id'));
@@ -122,7 +129,7 @@ class WebSocketServeCommand extends Command
             $pull->on('message', [$this, 'onPush']);
 
             // Set up our web socket server for clients wanting real-time updates
-            $webSock = new Server('0.0.0.0:' . $port, $loop); // Binding to 0.0.0.0 means remotes can connect
+            $webSock = new Server('0.0.0.0:' . $port, $this->loop); // Binding to 0.0.0.0 means remotes can connect
             new IoServer(
                 new HttpServer(
                     new WsServer(
@@ -134,7 +141,7 @@ class WebSocketServeCommand extends Command
             $this->logInfo('Web socket is listening on port ' . $port);
             $this->logInfo('Push service is listening on port ' . $pushPort);
 
-            $loop->run();
+            $this->loop->run();
         }
         catch (Exception $e) {
             $errorMessage = get_class($e) . ' in "' . $e->getFile() . '", line ' . $e->getLine() . ': ' . $e->getMessage() . ' (code ' . $e->getCode() . ')';
@@ -160,6 +167,42 @@ class WebSocketServeCommand extends Command
         catch (Exception $e) {
             $this->handler->onPushError($e);
         }
+    }
+
+    /**
+     * Set one-off timer.
+     *
+     * @param float $seconds The interval after which this timer will execute, in seconds
+     * @param callable $callback The callback that will be executed when this timer elapses
+     * @return React\EventLoop\Timer
+     */
+    public function setTimeout($seconds, $callback)
+    {
+        return $this->loop->addTimer($seconds, $callback);
+    }
+
+    /**
+     * Set timer at a set interval.
+     *
+     * @param float $seconds The interval after which this timer will execute, in seconds
+     * @param callable $callback The callback that will be executed when this timer elapses
+     * @return React\EventLoop\Timer
+     */
+    public function setInterval($interval, $callback)
+    {
+        return $this->loop->addPeriodicTimer($interval, $callback);
+    }
+
+    /**
+     * Stops a running timer.
+     *
+     * @param float $seconds The interval after which this timer will execute, in seconds
+     * @param callable $callback The callback that will be executed when this timer elapses
+     * @return React\EventLoop\Timer
+     */
+    public function cancelTimer(TimerInterface $timer)
+    {
+        $this->loop->cancelTimer($timer);
     }
 
     /**
