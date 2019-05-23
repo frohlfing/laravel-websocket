@@ -4,7 +4,6 @@ namespace FRohlfing\WebSocket\Services;
 
 use RuntimeException;
 use Symfony\Component\Process\Process;
-use function Symfony\Component\VarDumper\Dumper\esc;
 use ZMQ;
 use ZMQContext;
 use ZMQSocket;
@@ -34,7 +33,6 @@ class WebSocket
     /**
      * Create a new WebSocket instance.
      * @param array $config Configuration for the web socket
-     * @throws ZMQSocketException
      */
     public function __construct($config)
     {
@@ -85,7 +83,7 @@ class WebSocket
     {
         // todo Diese Funktion ist ein Workaround
         // Das folgende Problem tritt bei mir auf dem Windows-Laptop auf. Auf MAC, Linux oder Solidus-Server ist es noch nicht getestet.
-        // - Wenn WebSocket::push() mittels WebSockerPushCommand ausgeführt wird, fuinktioniert alles.
+        // - Wenn WebSocket::push() mittels WebSockerPushCommand ausgeführt wird, funktioniert alles.
         // - Wenn WebSocket::push() innerhalb eines HHT-Request ausgeführt wird, wird die Ausführung ohne Rückmeldung oder Exception bei $this->pushSocket->connect() beendet!!
         //   (per Browser http://localhost/laravel5/public/examples/websocket/push oder per AJAX-Request die Methode ChatController@ping aufrufen),
 

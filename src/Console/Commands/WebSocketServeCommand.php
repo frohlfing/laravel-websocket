@@ -2,7 +2,6 @@
 
 namespace FRohlfing\WebSocket\Console\Commands;
 
-use App\Exceptions\Handler;
 use Exception;
 use FRohlfing\WebSocket\Contracts\WebSocketHandler;
 use Illuminate\Console\Command;
@@ -11,6 +10,8 @@ use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;
 use React\EventLoop\Factory;
+use React\EventLoop\LoopInterface;
+use React\EventLoop\TimerInterface;
 use React\Socket\Server;
 use React\ZMQ\Context;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -83,7 +84,6 @@ class WebSocketServeCommand extends Command
      * Execute the console command.
      *
      * @return mixed
-     * @throws \ZMQSocketException
      */
     public function handle()
     {
@@ -174,7 +174,7 @@ class WebSocketServeCommand extends Command
      *
      * @param float $seconds The interval after which this timer will execute, in seconds
      * @param callable $callback The callback that will be executed when this timer elapses
-     * @return React\EventLoop\Timer
+     * @return TimerInterface
      */
     public function setTimeout($seconds, $callback)
     {
@@ -184,9 +184,9 @@ class WebSocketServeCommand extends Command
     /**
      * Set timer at a set interval.
      *
-     * @param float $seconds The interval after which this timer will execute, in seconds
+     * @param float $interval The interval after which this timer will execute, in seconds
      * @param callable $callback The callback that will be executed when this timer elapses
-     * @return React\EventLoop\Timer
+     * @return TimerInterface
      */
     public function setInterval($interval, $callback)
     {
@@ -194,11 +194,9 @@ class WebSocketServeCommand extends Command
     }
 
     /**
-     * Stops a running timer.
+     * Cancel a pending timer.
      *
-     * @param float $seconds The interval after which this timer will execute, in seconds
-     * @param callable $callback The callback that will be executed when this timer elapses
-     * @return React\EventLoop\Timer
+     * @param TimerInterface $timer The timer to cancel.
      */
     public function cancelTimer(TimerInterface $timer)
     {
