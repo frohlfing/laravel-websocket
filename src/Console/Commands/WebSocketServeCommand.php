@@ -12,6 +12,7 @@ use Ratchet\WebSocket\WsServer;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use React\EventLoop\TimerInterface;
+use React\Socket\SecureServer;
 use React\Socket\Server;
 use React\ZMQ\Context;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -130,6 +131,14 @@ class WebSocketServeCommand extends Command
 
             // Set up our web socket server for clients wanting real-time updates
             $webSock = new Server('0.0.0.0:' . $port, $this->loop); // Binding to 0.0.0.0 means remotes can connect
+            if (config('websocket.ssl_crt')) {
+                $webSock = new SecureServer($webSock, $this->loop, [
+                    'local_cert' => config('websocket.ssl_crt'),
+                    'local_pk' => config('websocket.ssl_key'),
+                    'allow_self_signed' => true,
+                    'verify_peer' => false,
+                ]);
+            }
             new IoServer(
                 new HttpServer(
                     new WsServer(

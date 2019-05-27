@@ -4,7 +4,16 @@
      * Read meta tags.
      */
     var address = $('meta[name="websocket-address"]').attr('content');
+    var auth = $('meta[name="websocket-auth"]').attr('content');
     var reconnectDelay = $('meta[name="websocket-reconnect-delay"]').attr('content');
+
+    if (auth) {
+        document.cookie = 'WS-Auth=' + auth + '; path=/' + (address.startsWith('wss:') ? '; secure' : '');
+    }
+    else {
+        document.cookie = 'WS-Auth=; path=/; Max-Age=-99999999;';
+        //document.cookie = 'WS-Auth=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    }
 
     /**
      * Namespace.
