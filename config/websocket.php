@@ -77,6 +77,19 @@ return [
     'zmq_pull_id' => 'zmq.pull',
 
     /*
+     |--------------------------------------------------------------------------
+     | Server Certificate and Private Key for a secure connection (wss://)
+     |--------------------------------------------------------------------------
+     |
+     | Enter here the full path to the SSL certification and the private key file.
+     | If no certificate is specified, only an unencrypted connection is possible.
+     |
+     */
+
+    'ssl_crt' => env('SSL_CRT'),
+    'ssl_key' => env('SSL_KEY'),
+
+    /*
     |--------------------------------------------------------------------------
     | Reconnect Delay
     |--------------------------------------------------------------------------
