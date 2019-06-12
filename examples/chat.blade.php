@@ -15,7 +15,7 @@
 @endsection
 
 @section('metas')
-    <meta name="websocket-address" content="{{ 'ws://' . $_SERVER['SERVER_NAME'] . ':' . config('websocket.port') }}" />
+    <meta name="websocket-address" content="{{ (config('websocket.ssl_crt') ? 'wss://' : 'ws://') . $_SERVER['SERVER_NAME'] . ':' . config('websocket.port') }}" />
     <meta name="websocket-reconnect-delay" content="{{ config('websocket.reconnect_delay') }}" />
 @endsection
 
