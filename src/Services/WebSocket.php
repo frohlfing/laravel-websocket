@@ -86,8 +86,6 @@ class WebSocket
         // - Wenn WebSocket::push() mittels WebSockerPushCommand ausgeführt wird, funktioniert alles.
         // - Wenn WebSocket::push() innerhalb eines HHT-Request ausgeführt wird, wird die Ausführung ohne Rückmeldung oder Exception bei $this->pushSocket->connect() beendet!!
         //   (per Browser http://localhost/laravel5/public/examples/websocket/push oder per AJAX-Request die Methode ChatController@ping aufrufen),
-        // s.a. https://github.com/zeromq/php-zmq/issues/197
-
         $cmd = 'php artisan websocket:push ' . '"' . str_replace('"', '\\"', $message) . '"';
 
         // Achtung:
